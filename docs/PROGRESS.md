@@ -2,9 +2,9 @@
 
 > New session? Read `CLAUDE.md` (the brief) first, then this file, then continue from "Next step".
 
-**Next step:** M0 in progress.
-**Current deploy URL:** none yet
-**Phone test URL:** none yet
+**Next step:** team runs the M0 phone check on the Moto G57 5G and pastes the JSON → then M1 (Lab + pilot tone + placement test → Gate 1).
+**Current deploy URL:** https://hum-switch.vercel.app (auto-deploys on every push to `main`)
+**Phone test URL:** same as above. For fast tuning: `npm run phone` prints a trycloudflare.com link
 **App name:** Hum · **Demo phone:** Moto G57 5G
 **Competition start:** at or before 2026-10-07 09:26 IST · **Deadline:** < 48 h from start, exact time TBD · **Feature freeze:** hour 40 or deadline − 8 h, whichever is earlier
 
@@ -15,10 +15,12 @@
   - [x] PROGRESS.md created
   - [x] Environment checked (see below)
   - [x] Team "go" received (2026-10-07 09:26 IST): name **Hum**, demo phone **Moto G57 5G**
-  - [ ] Vite + React + TS scaffold, first commit, public GitHub repo
-  - [ ] Vercel project linked, auto-deploy on push
-  - [ ] HTTPS phone loop (Cloudflare quick tunnel) documented as one routine
-  - [ ] Outreach message + interview guide drafted (docs/OUTREACH.md)
+  - [x] Vite + React + TS (strict) scaffold, public repo https://github.com/Ari191210/hum
+  - [x] Vercel project `hum-switch` linked; auto-deploy on push verified (live bundle stamp = latest commit aa5aa10)
+  - [x] HTTPS phone loop: Vercel URL (main routine) + `npm run phone` quick tunnel (verified, Vite allow-list OK)
+  - [x] Outreach message + interview guide drafted (docs/OUTREACH.md)
+  - [x] Phone-check screen (sample rate, EC/NS/AGC actually applied, mic level, voices, Share diagnostics)
+  - [ ] Phone check run on Moto G57 5G (waiting on team)
 - [ ] **M1** (1–3h) Lab + self-test + diagnostics + placement test → **Gate 1**
 - [ ] **M2** (3–8h) MOTION detector, baselines, recording/replay, tests → **Gate 2**
 - [ ] **M3** (8–16h) Talk Board + scanning + speech on SwitchSource; calibration wizard
@@ -42,12 +44,18 @@ Fallback ladder position: not started (L0)
 - GitHub CLI 2.92.0, logged in as `Ari191210`
 - Vercel CLI 54.5.1, logged in as `ari191210`
 - cloudflared installed via winget → `C:/Program Files (x86)/cloudflared/cloudflared.exe`
-- Project folder: `C:/Users/DELL/batmode` (git initialised, branch `main`, **no commits yet** — first commit waits for competition start)
+- Project folder: `C:/Users/DELL/batmode` (branch `main`, first commit 2026-10-07 ~09:27 IST)
+- Stack versions: Vite 8.3, React 19.3, TypeScript 6.0 (strict + noUncheckedIndexedAccess), Vitest 5
 
 ## Decisions
 
 - 2026-10-07: App name **Hum** (team choice). Local folder stays `batmode`; GitHub repo is `Ari191210/hum`.
 - 2026-10-07: Demo phone is Moto G57 5G.
+- 2026-10-07: **Final domain is `hum-switch.vercel.app`.** Do not change it: the M5 APK (TWA) and assetlinks.json are tied to this domain.
+- 2026-10-07: **vite-plugin-pwa deferred to M5** (sequencing, not dropped). Reason: a service worker caches old builds, which would make phones run stale code while we tune the sonar in M1–M4.
+- 2026-10-07: No client-side router. Screens switch by app state, which avoids Vercel rewrite and TWA start_url problems.
+- 2026-10-07: Two folders added beyond the brief's list: `src/platform` (browser detection) and `src/diagnostics` (share/export).
+- 2026-10-07: The repo has a commit-message hook that requires conventional commits (`feat:`, `fix:`, `docs:`…).
 
 ## Measured results
 

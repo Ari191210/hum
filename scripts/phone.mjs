@@ -1,0 +1,37 @@
+// Fast phone loop for DSP tuning (M1–M2): runs the dev server and a Cloudflare quick tunnel,
+// then prints an HTTPS link the phone can open (the mic only works over HTTPS).
+// The everyday routine is simpler: open https://hum-switch.vercel.app — every push deploys there.
+import { spawn } from 'node:child_process'
+import { existsSync } from 'node:fs'
+
+const PORT = 5173
+const CLOUDFLARED = ['C:/Program Files (x86)/cloudflared/cloudflared.exe', 'C:/Program Files/cloudflared/cloudflared.exe'].find(
+  existsSync,
+) ?? 'cloudflared'
+
+const vite = spawn('npx', ['vite', '--port', String(PORT), '--strictPort'], { stdio: 'inherit', shell: true })
+const tunnel = spawn(CLOUDFLARED, ['tunnel', '--no-autoupdate', '--url', `http://localhost:${PORT}`])
+
+let printed = false
+function scan(chunk) {
+  const url = /https:\/\/[a-z0-9-]+\.trycloudflare\.com/.exec(chunk.toString())?.[0]
+  if (url && !printed) {
+    printed = true
+    console.log(`\n==============================\n PHONE URL: ${url}\n==============================\n`)
+  }
+}
+tunnel.stdout.on('data', scan)
+tunnel.stderr.on('data', scan)
+
+function stop() {
+  vite.kill()
+  tunnel.kill()
+  process.exit(0)
+}
+process.on('SIGINT', stop)
+process.on('SIGTERM', stop)
+vite.on('exit', stop)
+tunnel.on('exit', (code) => {
+  console.error(`cloudflared exited (${code}). Use https://hum-switch.vercel.app instead.`)
+  stop()
+})
