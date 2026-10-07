@@ -94,7 +94,12 @@ export function checkSampleRate(sampleRate: number | null): CheckResult {
     label: 'Sample rate',
     status: sampleRate === 48_000 ? 'PASS' : ok ? 'WARN' : 'FAIL',
     value: sampleRate ? `${sampleRate} Hz` : 'unknown',
-    fix: ok ? 'Works, but 48 kHz gives more room for the tone. Nothing to do.' : 'Audio runs too slowly for ultrasound on this browser. Use Chrome.',
+    fix:
+      sampleRate === 48_000
+        ? null
+        : ok
+          ? 'Works, but 48 kHz gives more room for the tone. Nothing to do.'
+          : 'Audio runs too slowly for ultrasound on this browser. Use Chrome.',
   }
 }
 

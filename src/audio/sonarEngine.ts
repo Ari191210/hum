@@ -61,9 +61,17 @@ export class SonarEngine {
     this.listeners.forEach((fn) => fn())
   }
 
-  /** Must be called from a tap: browsers only allow sound after a user gesture. */
-  async start(): Promise<void> {
-    if (this.state === 'running' || this.state === 'starting') return
+  private starting: Promise<void> | null = null
+
+  /** Must be called from a tap: browsers only allow sound after a user gesture. Safe to call twice. */
+  start(): Promise<void> {
+    if (this.state === 'running') return Promise.resolve()
+    if (this.state === 'paused') return this.resume()
+    this.starting ??= this.doStart().finally(() => (this.starting = null))
+    return this.starting
+  }
+
+  private async doStart(): Promise<void> {
     this.state = 'starting'
     this.error = null
     this.emit()
