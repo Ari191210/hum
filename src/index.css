@@ -56,4 +56,49 @@ dd { margin: 0; font-weight: 600; }
   max-height: 40vh;
 }
 
-footer { margin-top: 2rem; color: var(--muted); font-size: 0.8rem; }
+
+/* ---- M1 Lab (functional only; polish comes after Gate 1) ---- */
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.pill { padding: 0.2rem 0.7rem; border-radius: 999px; background: #1c2a30; font-size: 0.85rem; font-weight: 600; }
+.pill.running { background: var(--accent); color: #06201a; }
+.pill.error { background: var(--warn); color: #2a0a00; }
+.banner { margin: 0; padding: 0.75rem 1rem; background: #3a1f17; color: var(--warn); font-weight: 600; }
+button.big.secondary { background: #1c2a30; color: var(--fg); border: 2px solid #2f454d; }
+button.link { background: none; border: 0; color: var(--accent); font: inherit; min-height: 3rem; padding: 0 0.5rem; }
+
+.spectrum { margin: 1rem 0; }
+.spectrum canvas { display: block; width: 100%; border-radius: 0.5rem; }
+.spectrum-line { height: 110px; }
+.spectro-wrap { position: relative; margin-top: 0.5rem; }
+.spectrogram { height: 220px; }
+.spectro-labels { position: absolute; inset: 0.25rem auto 0.25rem 0.4rem; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
+.axis-labels { display: flex; justify-content: space-between; }
+.axis-labels, .spectro-labels { font-size: 0.75rem; color: var(--muted); }
+.spectro-labels span { background: rgba(11,18,22,0.7); padding: 0 0.3rem; border-radius: 0.25rem; }
+figcaption { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; }
+
+.readouts { font-variant-numeric: tabular-nums; }
+.controls label { display: block; margin: 1rem 0; }
+.controls input[type='range'] { display: block; width: 100%; height: 3rem; accent-color: var(--accent); }
+
+.choices { display: grid; gap: 0.5rem; }
+.choice { min-height: 3.5rem; text-align: left; padding: 0 1rem; border-radius: 0.75rem; border: 2px solid #2f454d; background: #111c21; color: var(--fg); font: inherit; }
+.choice.on { border-color: var(--accent); }
+
+.phase { margin: 1.5rem 0; padding: 1.5rem; border-radius: 1rem; background: #13242a; border: 2px solid var(--accent); text-align: center; font-size: 1.2rem; }
+.phase-title { font-size: 1.8rem; font-weight: 800; margin: 0; }
+.phase-count { font-size: 3.5rem; font-weight: 800; margin: 0; font-variant-numeric: tabular-nums; }
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 0.4rem; border-bottom: 1px solid #23343a; }
+
+.checks { list-style: none; padding: 0; }
+.checks li { display: flex; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid #23343a; }
+.checks .status { min-width: 3.5rem; font-weight: 800; }
+.checks .pass .status { color: var(--accent); }
+.checks .warn .status { color: #ffd479; }
+.checks .fail .status { color: var(--warn); }
+.fix { display: block; color: var(--muted); font-size: 0.9rem; }
+.small { font-size: 0.85rem; color: var(--muted); }
+.build { padding: 1rem; color: var(--muted); font-size: 0.8rem; text-align: center; }

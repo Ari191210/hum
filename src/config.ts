@@ -54,6 +54,8 @@ export const DB_FLOOR = -160
 export const VIEW_SPAN_HZ = 500
 export const SPECTRO_DB_MIN = -130
 export const SPECTRO_DB_MAX = -30
+/** Lab readout only: echo spread below this is shown as "still". Not used for detection. (hypothesis) */
+export const DISPLAY_STILL_MOTION_DB = -45
 /** How often on-screen numbers refresh (the graphs refresh every frame). */
 export const READOUT_INTERVAL_MS = 200
 
