@@ -1,7 +1,7 @@
 // Fast phone loop for DSP tuning (M1–M2): runs the dev server and a Cloudflare quick tunnel,
 // then prints an HTTPS link the phone can open (the mic only works over HTTPS).
 // The everyday routine is simpler: open https://hum-switch.vercel.app — every push deploys there.
-import { spawn } from 'node:child_process'
+import { spawn, spawnSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
 
 const PORT = 5173
@@ -9,7 +9,8 @@ const CLOUDFLARED = ['C:/Program Files (x86)/cloudflared/cloudflared.exe', 'C:/P
   existsSync,
 ) ?? 'cloudflared'
 
-const vite = spawn('npx', ['vite', '--port', String(PORT), '--strictPort'], { stdio: 'inherit', shell: true })
+// Spawn Vite with node directly (no shell) so stopping it doesn't leave orphan processes on Windows.
+const vite = spawn(process.execPath, ['node_modules/vite/bin/vite.js', '--port', String(PORT), '--strictPort'], { stdio: 'inherit' })
 const tunnel = spawn(CLOUDFLARED, ['tunnel', '--no-autoupdate', '--url', `http://localhost:${PORT}`])
 
 let printed = false
@@ -23,9 +24,15 @@ function scan(chunk) {
 tunnel.stdout.on('data', scan)
 tunnel.stderr.on('data', scan)
 
+function killTree(child) {
+  if (child.exitCode !== null || child.pid === undefined) return
+  if (process.platform === 'win32') spawnSync('taskkill', ['/pid', String(child.pid), '/T', '/F'])
+  else child.kill()
+}
+
 function stop() {
-  vite.kill()
-  tunnel.kill()
+  killTree(vite)
+  killTree(tunnel)
   process.exit(0)
 }
 process.on('SIGINT', stop)
